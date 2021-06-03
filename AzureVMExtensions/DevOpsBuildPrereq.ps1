@@ -9,9 +9,9 @@ if (!(Test-Path C:\ProgramData\DevOpsInstallFolder\Scripts)) {
 
 $SysPrepScriptcontents = {
 
-    if( Test-Path C:\windows\system32\Sysprep\unattend.xml ){ Remove-Item C:\windows\system32\Sysprep\unattend.xml -Force}
-        C:\Windows\System32\Sysprep\Sysprep.exe /oobe /generalize /quiet /shutdown;
-        while($true) { $imageState = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State | Select-Object ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }
+if( Test-Path C:\windows\system32\Sysprep\unattend.xml ){ Remove-Item C:\windows\system32\Sysprep\unattend.xml -Force}
+C:\Windows\System32\Sysprep\Sysprep.exe /oobe /generalize /quiet /shutdown;
+while($true) { $imageState = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State | Select-Object ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }
 }
 $Sysprepscriptpath = 'C:\ProgramData\DevOpsInstallFolder\Scripts\Sysprepscript.ps1'
 
