@@ -1,4 +1,3 @@
-
 if (!(Test-Path C:\ProgramData\DevOpsInstallFolder)) {
     New-Item C:\ProgramData\DevOpsInstallFolder -ItemType Directory
 }
