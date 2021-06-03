@@ -1,0 +1,1 @@
+New-Item C:\Windows\Temp\Testfolder -ItemType Directory
