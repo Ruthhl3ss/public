@@ -34,7 +34,7 @@
         },
         "adminUsername": {
             "type": "string",
-            "defaultValue": "NKOAdmin"
+            "defaultValue": "W10Admin"
         },
         "adminPassword": {
             "type": "secureString"
