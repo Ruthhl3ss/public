@@ -2,6 +2,6 @@ Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI
 
 Start-Sleep -Seconds 5
 
-az extension add --name azure-devops
+az extension add --upgrade -n azure-devops
 
 #az config set extension.use_dynamic_install=yes_without_prompt
