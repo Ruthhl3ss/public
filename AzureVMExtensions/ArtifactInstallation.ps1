@@ -1,3 +1,5 @@
+$Path = 'C:\ProgramData\DevOpsInstallFolder\'+$PackageName
+
 #CreationOfFolders
 If (!(Test-Path 'C:\ProgramData\DevOpsInstallFolder')){
     New-Item 'C:\ProgramData\DevOpsInstallFolder' -ItemType Directory
