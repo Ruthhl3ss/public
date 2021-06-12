@@ -19,7 +19,7 @@ function InstallArtifact {
     [string]$ArtifactName,
     [Parameter(Mandatory = $True, Position = 9, ValueFromPipeline = $False)]
     [string]$Version
-)
+    )
 
     $Path = 'C:\ProgramData\DevOpsInstallFolder\'+$PackageName
 
