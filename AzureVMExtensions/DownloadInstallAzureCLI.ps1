@@ -1,3 +1,10 @@
-Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; rm .\AzureCLI.msi; Start-Sleep -Seconds 5; az extension add --name azure-devops
+Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi
 
-#az config set extension.use_dynamic_install=yes_without_prompt
+Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'
+
+rm .\AzureCLI.msi
+
+Start-Sleep -Seconds 5
+
+az extension add --name azure-devops --yes
+
