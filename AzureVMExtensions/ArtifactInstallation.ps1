@@ -9,7 +9,7 @@ If (!(Test-Path $Path)){
     New-Item $Path -ItemType Directory
 }
 
-az extension add --name azure-devops --yes
+#az extension add --name azure-devops --yes
 
 az login --allow-no-subscriptions -u $AzLoginname -p $AzPassword 
 
