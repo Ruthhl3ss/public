@@ -2,7 +2,7 @@ param (
     [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $False)]
     [string]$AzLoginname,
     [Parameter(Mandatory = $True, Position = 2, ValueFromPipeline = $False)]
-    [Securestring]$AzPassword,
+    [string]$AzPassword,
     [Parameter(Mandatory = $True, Position = 3, ValueFromPipeline = $False)]
     [string]$PackageName,
     [Parameter(Mandatory = $True, Position = 4, ValueFromPipeline = $False)]
