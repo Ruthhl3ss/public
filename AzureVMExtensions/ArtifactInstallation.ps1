@@ -9,6 +9,8 @@ If (!(Test-Path $Path)){
     New-Item $Path -ItemType Directory
 }
 
+az extension add --name azure-devops --yes
+
 az login --allow-no-subscriptions -u $AzLoginname -p $AzPassword 
 
 az artifacts universal download --organization $DOOrganizationname --project $DOProject --scope $Scope --feed $Feed --version $Version --name $ArtifactName --path $path
