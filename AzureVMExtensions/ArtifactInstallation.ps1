@@ -1,4 +1,8 @@
-param (
+
+
+function InstallArtifact {
+
+    param (
     [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $False)]
     [string]$AzLoginname,
     [Parameter(Mandatory = $True, Position = 2, ValueFromPipeline = $False)]
@@ -18,8 +22,6 @@ param (
     [Parameter(Mandatory = $True, Position = 9, ValueFromPipeline = $False)]
     [string]$Version
     )
-
-function InstallArtifact {
 
     $Path = 'C:\ProgramData\DevOpsInstallFolder\'+$PackageName
 
@@ -52,4 +54,4 @@ function InstallArtifact {
     }
 }
 
-InstallArtifact -AzLoginname $AzLoginname -AzPassword $AzPassword -PackageName $PackageName -DOOrganizationname $DOOrganizationname -DOProject $DOProject -Scope $Scope -Feed $Feed -ArtifactName $ArtifactName -Version $Version
+#InstallArtifact -AzLoginname $AzLoginname -AzPassword $AzPassword -PackageName $PackageName -DOOrganizationname $DOOrganizationname -DOProject $DOProject -Scope $Scope -Feed $Feed -ArtifactName $ArtifactName -Version $Version
