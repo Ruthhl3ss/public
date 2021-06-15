@@ -8,18 +8,20 @@ param (
 [Parameter(Mandatory = $True, Position = 2, ValueFromPipeline = $False)]
 [string]$AzPassword,
 [Parameter(Mandatory = $True, Position = 3, ValueFromPipeline = $False)]
-[string]$PackageName,
+[string]$AztenantID,
 [Parameter(Mandatory = $True, Position = 4, ValueFromPipeline = $False)]
-[string]$DOOrganizationname,
+[string]$PackageName,
 [Parameter(Mandatory = $True, Position = 5, ValueFromPipeline = $False)]
-[string]$DOProject,
+[string]$DOOrganizationname,
 [Parameter(Mandatory = $True, Position = 6, ValueFromPipeline = $False)]
-[string]$Scope,
+[string]$DOProject,
 [Parameter(Mandatory = $True, Position = 7, ValueFromPipeline = $False)]
-[string]$Feed,
+[string]$Scope,
 [Parameter(Mandatory = $True, Position = 8, ValueFromPipeline = $False)]
-[string]$ArtifactName,
+[string]$Feed,
 [Parameter(Mandatory = $True, Position = 9, ValueFromPipeline = $False)]
+[string]$ArtifactName,
+[Parameter(Mandatory = $True, Position = 10, ValueFromPipeline = $False)]
 [string]$Version
 )
 
@@ -38,7 +40,7 @@ If (!(Test-Path $Path)){
 
 az extension add --name azure-devops --yes
 
-az login --allow-no-subscriptions -u $AzLoginname -p $AzPassword 
+az login --allow-no-subscriptions -u $AzLoginname -p $AzPassword --tenant $AztenantID
 
 az artifacts universal download --organization $DOOrganizationname --project $DOProject --scope $Scope --feed $Feed --version $Version --name $ArtifactName --path $path
 
