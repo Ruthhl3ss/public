@@ -1,7 +1,5 @@
 
-
-
-
+#Gather parameters
 param (
 [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $False)]
 [string]$AzLoginname,
@@ -24,7 +22,7 @@ param (
 [Parameter(Mandatory = $True, Position = 10, ValueFromPipeline = $False)]
 [string]$Version
 )
-
+#Create extra variable
 $Path = 'C:\ProgramData\DevOpsInstallFolder\'+$PackageName
     
 #CreationOfFolders
@@ -35,23 +33,19 @@ If (!(Test-Path 'C:\ProgramData\DevOpsInstallFolder')){
 If (!(Test-Path $Path)){
     New-Item $Path -ItemType Directory
 }
-
-
-
+#Install Azure DevOps Extension for Azure CLI
 az extension add --name azure-devops --yes
-
+#Log on to Azure CLI
 az login --allow-no-subscriptions -u $AzLoginname -p $AzPassword --tenant $AztenantID
-
+#DOwnload Artifacts
 az artifacts universal download --organization $DOOrganizationname --project $DOProject --scope $Scope --feed $Feed --version $Version --name $ArtifactName --path $path
-
+#Grab install script path from artifact
 $installScript = Get-ChildItem $Path -Filter *.ps1 
 
+#Run Install script if available
 If (Test-Path $installScript.Fullname ){
-
     .$installScript.Fullname
 }
 Else {
-
     Write-Host "Install Script not available"
 }
-
