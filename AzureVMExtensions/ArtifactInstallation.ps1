@@ -1,6 +1,6 @@
 
 
-function InstallArtifact {
+
 
     param (
     [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $False)]
@@ -52,6 +52,6 @@ function InstallArtifact {
 
         Write-Host "Install Script not available"
     }
-}
+
 
 #InstallArtifact -AzLoginname $AzLoginname -AzPassword $AzPassword -PackageName $PackageName -DOOrganizationname $DOOrganizationname -DOProject $DOProject -Scope $Scope -Feed $Feed -ArtifactName $ArtifactName -Version $Version
