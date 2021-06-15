@@ -34,11 +34,11 @@
         New-Item $Path -ItemType Directory
     }
 
-    $Pw = ConvertTo-SecureString $AzPassword -AsPlainText -Force
+    #$Pw = ConvertTo-SecureString $AzPassword -AsPlainText -Force
 
     az extension add --name azure-devops --yes
 
-    az login --allow-no-subscriptions -u $AzLoginname -p $Pw 
+    az login --allow-no-subscriptions -u $AzLoginname -p $AzPassword 
 
     az artifacts universal download --organization $DOOrganizationname --project $DOProject --scope $Scope --feed $Feed --version $Version --name $ArtifactName --path $path
 
