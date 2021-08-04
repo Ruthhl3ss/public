@@ -1,0 +1,220 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+
+pool:
+  name: 'NKO Agents'
+
+variables:
+- group: Windows10ImageVariables
+- group: AzureKeyVault
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: 'ARM Template deployment: Windows 10 VM'
+  inputs:
+    azureResourceManagerConnection: '<<Service Connection Name>>'
+    subscriptionId: '<<Subscription ID>>'
+    resourceGroupName: 'RG_WE_Win10ImageBuild_Temp'
+    location: 'West Europe'
+    csmFile: ARMTemplates/Windows10Template.json
+    overrideParameters: '-location "$(Location)" -networkInterfaceName "W10BuildNIC" -subnetName "$(Subnet)" -virtualNetworkId "$(VNetResourceID)" -virtualMachineName "$(VMName)" -virtualMachineComputerName "W10Build" -osDiskType "Premium_LRS" -virtualMachineSize "Standard_B4ms" -adminUsername "W10Admin" -adminPassword $(LocalAdminPassword) -patchMode "Manual"'
+
+- task: AzureCLI@2
+  displayName: 'Azure CLI - Artifact Installation - Microsoft Teams'
+  inputs:
+    azureSubscription: '<<Service Connection Name>>'
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+     $content = {
+     #Variables
+     $PackageName = 'MicrosoftTeams'
+     $ArtifactName = 'teams_installer'
+     $ArtifactBuild = '427'
+     $DevOpsOrgName = '<<DevOps Organization Name>>'
+     $DevOpsProjectName = '<<DevOps Project Name>>'
+     $Path = 'C:\ProgramData\DevOpsInstallFolder\'+$PackageName
+     $token = "<<PAT TOKEN>>"
+     
+     #CreationOfFolders
+     If (!(Test-Path 'C:\ProgramData\DevOpsInstallFolder')){
+         New-Item 'C:\ProgramData\DevOpsInstallFolder' -ItemType Directory
+     }
+     
+     If (!(Test-Path $Path)){
+         New-Item $Path -ItemType Directory
+     }
+     
+         
+     $url="https://dev.azure.com/$($DevOpsOrgName)/$($DevOpsProjectName)/_apis/build/builds/$($ArtifactBuild)/artifacts?artifactName=$($ArtifactName)&api-version=6.1-preview.5&%24format=zip"
+         
+     $token = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes(":$($token)"))
+         
+     $response = Invoke-RestMethod -Uri $url -Headers @{Authorization = "Basic $token"} -Method Get -ContentType application/zip -OutFile "$Path\Artifact.zip"
+     
+     Expand-Archive -LiteralPath "$Path\Artifact.zip" -DestinationPath $Path
+     
+     $installScript = Get-ChildItem $Path -Filter *.ps1 -Recurse
+     
+     If (Test-Path $installScript.Fullname ){
+     
+         .$installScript.Fullname
+     }
+     Else {
+     
+         Write-Host "Install Script not available"
+     }
+     
+     }
+     
+     Set-Content -Path .\Artifactinstall.ps1 -Value $content
+     
+     $VMName = "$(VMName)"
+     
+     $vm = Get-AzVM -Name $VMName
+     $vm | Invoke-AzVMRunCommand -CommandId "RunPowerShellScript" -ScriptPath .\Artifactinstall.ps1
+
+- task: AzureCLI@2
+  displayName: 'Azure CLI - Sysprep'
+  inputs:
+    azureSubscription: '<<Service Connection Name>>'
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+     $FileUri = "https://raw.githubusercontent.com/Ruthhl3ss/public/main/AzureVMExtensions/SysPrepScript.ps1"
+     
+     Set-AzVMCustomScriptExtension -ResourceGroupName $(RGName) -VMName $(VMName) -Location $(Location) -FileUri $FileUri -Run 'SysPrepScript.ps1' -Name SysPrep
+     
+     Get-AzVMExtension -ResourceGroupName $(RGName) -VMName $(VMName) | where {$_.ExtensionType -eq "CustomScriptExtension"} | Remove-AzVMExtension -Force
+
+- task: AzureCLI@2
+  displayName: 'Azure CLI - Capture Image'
+  inputs:
+    azureSubscription: '<<Service Connection Name>>'
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+     #  Capture Image
+     
+     $vmName = '$(VMName)'
+     $rgName = '$(RGName)'
+     $location = '$(Location)'
+     $imageName = '$(ImageName)'
+     $ImagergName = '$(ImageRGName)'
+     
+     
+     $VMStatus = Get-AzVM -ResourceGroupName $rgName -Name $vmName -Status
+     
+     if ($VMStatus.Statuses[1].DisplayStatus -eq 'VM Running') {
+         
+         Write-Host 'VM is Running and will be turned off'
+     
+         Stop-AzVM -ResourceGroupName $rgName -Name $vmName -Force    
+     
+         Set-AzVm -ResourceGroupName $rgName -Name $vmName -Generalized
+     
+         $vm = Get-AzVM -Name $vmName -ResourceGroupName $rgName
+     
+         $ImageConfiguration = New-AzImageConfig -Location $location -SourceVirtualMachineId $vm.Id
+     
+         New-AzImage -Image $ImageConfiguration -ImageName $imageName -ResourceGroupName $ImagergName
+     
+     }
+     else {
+         Write-Host 'VM is not running, capturing image will start immediatly'
+     
+         Set-AzVm -ResourceGroupName $rgName -Name $vmName -Generalized
+     
+         $vm = Get-AzVM -Name $vmName -ResourceGroupName $rgName
+     
+         $ImageConfiguration = New-AzImageConfig -Location $location -SourceVirtualMachineId $vm.Id
+     
+         New-AzImage -Image $ImageConfiguration -ImageName $imageName -ResourceGroupName $ImagergName
+     }
+     
+     ## Removing VM  Resource Group
+     $ExistingImages = Get-AzResource -ResourceGroupName $ImagergName | Where-Object ResourceType -eq 'Microsoft.Compute/images'
+     
+     if ($ExistingImages.Name -contains $imageName) {
+         
+         Remove-AzResourceGroup -Name $rgName -Force
+     
+     }
+
+- task: AzureCLI@2
+  displayName: 'Azure CLI - Add to Shared Image Gallery'
+  inputs:
+    azureSubscription: '<<Service Connection Name>>'
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+     ## Variables
+     
+     $location = '$(Location)'
+     $imageName = '$(ImageName)'
+     $ImagergName = '$(ImageRGName)'
+     $SharedImageGalleryName = 'WVDImageGallery'
+     $SharedImageGalleryRG = 'RG_WE_SharedImageGallery'
+     $SharedImageGalleryDefinitionName = 'Windows10WVDImage'
+     $GalleryImageVersionName = '1.0.$(Build.BuildId)'
+     
+     
+     ## Get Image info
+     
+     $managedImage = Get-AzImage `
+        -ImageName $imageName `
+        -ResourceGroupName $ImagergName
+     
+     ## Get Image Definition Info
+     
+     $ImageDefinition = Get-AzGalleryImageDefinition `
+         -ResourceGroupName $SharedImageGalleryRG `
+         -GalleryName $SharedImageGalleryName `
+         -GalleryImageDefinitionName $SharedImageGalleryDefinitionName
+     
+     ## Create Upload Job
+     
+     $region1 = @{Name='West Europe';ReplicaCount=2}
+     $targetRegions = @($region1)
+     $job = $imageVersion = New-AzGalleryImageVersion `
+           -GalleryImageDefinitionName $imageDefinition.Name `
+           -GalleryImageVersionName $GalleryImageVersionName `
+           -GalleryName $SharedImageGalleryName `
+           -ResourceGroupName $imageDefinition.ResourceGroupName `
+           -Location $location `
+           -TargetRegion $targetRegions  `
+           -SourceImageId $managedImage.Id.ToString() `
+           -PublishingProfileEndOfLifeDate '2021-12-31' `
+           -asJob
+     
+     ## Wait for upload to complete
+     $Count = 1
+     
+     do {
+         #Starting Count
+         $Count
+         $Count++
+     
+         Write-Host "Shared Image Gallery Upload not yet completed, Starting Sleep for 60 Seconds"
+         Start-Sleep 60
+     
+         if ($Count -ge 75) { 
+             Write-Host "Shared Image Gallery Upload FAILED"
+             Break
+         }
+     } while ($job.State -eq "Running")
+     
+     if ($job.State -eq "Completed") {
+         Write-Host "Shared Image Gallery Upload completed"
+     }
+
+- task: UniversalPackages@0
+  displayName: 'Publish Image Artifact'
+  inputs:
+    command: publish
+    vstsFeedPublish: '<<FEED ID>>'
+    vstsFeedPackagePublish: windows10image
+    packagePublishDescription: '$(ImageName)'
