@@ -41,9 +41,9 @@ stages:
           #Variables
           $PackageName = 'MicrosoftTeams'
           $ArtifactName = 'teams_installer'
-          $ArtifactBuild = '427'
-          $DevOpsOrgName = 'niels0835'
-          $DevOpsProjectName = 'WVD%20DevOps'
+          $ArtifactBuild = '<<Artifact Build>>'
+          $DevOpsOrgName = '<<DevOps Org Name>>'
+          $DevOpsProjectName = '<<DevOps Project Name>>'
           $Path = 'C:\ProgramData\DevOpsInstallFolder\'+$PackageName
           $token = "<<PAT TOKEN>>"
           
