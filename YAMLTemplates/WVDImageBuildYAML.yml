@@ -45,7 +45,7 @@ stages:
           $DevOpsOrgName = 'niels0835'
           $DevOpsProjectName = 'WVD%20DevOps'
           $Path = 'C:\ProgramData\DevOpsInstallFolder\'+$PackageName
-          $token = "7c45ne3tzgi5vkp5j2amrp65mom6sptut5kpou52jtgogz2ny3nq"
+          $token = "<<PAT TOKEN>>"
           
           #CreationOfFolders
           If (!(Test-Path 'C:\ProgramData\DevOpsInstallFolder')){
@@ -57,7 +57,7 @@ stages:
           }
           
               
-          $url="https://dev.azure.com/niels0835/WVD%20DevOps/_apis/build/builds/$($ArtifactBuild )/artifacts?artifactName=$($ArtifactName)&api-version=6.1-preview.5&%24format=zip"
+          $url="https://dev.azure.com/$($DevOpsOrgName)/$($DevOpsProjectName)/_apis/build/builds/$($ArtifactBuild )/artifacts?artifactName=$($ArtifactName)&api-version=6.1-preview.5&%24format=zip"
               
           $token = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes(":$($token)"))
               
