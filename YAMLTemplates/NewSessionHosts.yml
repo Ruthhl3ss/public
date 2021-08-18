@@ -1,0 +1,160 @@
+pool:
+  name: '<<Agent Pool Name>>'
+
+variables:
+- group: Windows10ImageVariables
+- group: AzureKeyVault
+
+parameters:
+- name: resourcegroupname
+  displayName: Resource Group Name to Deploy in
+  type: string
+  default: RG_WE_AVD_Development
+- name: galleryresourcegroup
+  displayName: Resource Group Name for the Shared Image Gallery
+  type: string
+  default: RG_WE_SharedImageGallery
+- name: galleryname
+  displayName: Name of the Shared Image Gallery
+  type: string
+  default: WVDImageGallery
+- name: galleryimagedefinitionname
+  displayName: Name of the Image Definition
+  type: string
+  default: Windows10WVDImage
+- name: sessionhostprefix
+  displayName: Prefix for VM name Example(NKO-AVD-)
+  type: string
+  default: NKO-AVD-
+- name: sessionhostinstances
+  displayName: Number of SessionHosts to Deploy
+  type: string
+  default: 2
+- name: sessionhoststartnumber
+  displayName: Number of first SessionHost
+  type: string
+  default: 1
+- name: hostpoolname
+  displayName: Number of Hostpool to add SessionHosts
+  type: string
+  default: WVD-Development
+- name: sessionhostsize
+  displayName: Size for SessionHost
+  type: string
+  default: Standard_DS4_v2
+- name: domainjoinusername
+  displayName: Username for Domain Join
+  type: string
+  default: $(DomainJoinUsername)
+- name: domainjoinpassword
+  displayName: Password for Domain Join
+  type: string
+  default: $(DomainJoinPassword)
+- name: vmlocalusername
+  displayName: Username for VM Local User
+  type: string
+  default: NielsKokAdmin
+- name: vmlocalpassword
+  displayName: Password for VM Local User
+  type: string
+  default: $(LocalAdminPassword)
+- name: domain
+  displayName: Domain Name to join
+  type: string
+  default: <<Domain Name>>
+- name: oupath
+  displayName: OU Path for Domain Join
+  type: string
+  default: <<OU NAME>>
+- name: vnetresourcegroup
+  displayName: Resource Group Name for VNet
+  type: string
+  default: <<VNET Resource Group>>
+- name: vnetname
+  displayName: Name of the VNet
+  type: string
+  default: <<VNet Name>>
+- name: subnetname
+  displayName: Name of the subnet
+  type: string
+  default: <<Subnet Name>>
+
+
+stages:
+- stage: CreateResourceGroup
+  jobs:
+  - job: CreateResourceGroup
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: '$(ServiceConnectionName)'
+        subscriptionId: '$(ARM_Subscription_ID)'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: ${{ parameters.resourcegroupname }}
+        location: '$(Location)'
+        templateLocation: 'Linked artifact'
+        csmFile: 'ARMTemplates\EmptyResourceGroup.json'
+        deploymentMode: 'Incremental'
+- stage: GetHostPoolToken
+  jobs:
+  - job: RunPowerShellScript
+    steps:
+    - task: AzureCLI@2
+      name: HostpoolToken
+      inputs:
+        azureSubscription: 'WVDSpokeSub_Full'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          Import-Module -Name Az.Accounts
+
+          Write-Host("assignment value ")
+          $secret = ConvertTo-SecureString -String "<<Service Principal Secret>>" -AsPlainText -Force
+          $username = "<<Service Principal APP ID>>"
+
+          Write-Host("setting up credential")
+
+          $Credential = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $username, $secret 
+
+          Write-Host("connect......")
+          Connect-AzAccount -Credential $Credential -Tenant "$(az_tenant_id)" -ServicePrincipal
+
+          Start-Sleep 5
+
+          Select-AzSubscription -SubscriptionId "$(ARM_SUBSCRIPTION_ID)" | Set-AzContext
+          
+          Write-host "Creating Token"
+          
+          $resourceGroupName = "<<Resource Group for Hostpool>>"
+          $hostpoolname = "<<Hostpool Name>>" 
+              
+          $GetToken = New-AzWvdRegistrationInfo -SubscriptionId "$(ARM_SUBSCRIPTION_ID)" -ResourceGroupName $resourceGroupName -HostPoolName $hostpoolname -ExpirationTime (Get-Date).AddDays(14) -ErrorAction SilentlyContinue
+          
+          Write-Host $GetToken.Token
+
+          $Token = $GetToken.Token
+          if !(Get-Path $(Pipeline.Workspace)\variables){
+            New-Item -Path $(Pipeline.Workspace)\variables -ItemType Directory
+          }
+          
+          Set-Content -Path $(Pipeline.Workspace)\variables\token.txt -Value $Token
+
+- stage: DeployNewSessionHosts
+  jobs:
+  - job: DeployBicepTemplate
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: '$(ServiceConnectionName)'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: |           
+            $Token = Get-content -Path $(Pipeline.Workspace)\variables\token.txt
+
+            Write-Host $Token
+        
+            az deployment group create `
+            --resource-group ${{ parameters.resourcegroupname }} `
+            --template-file Bicep\NewSessionHost.bicep `
+            --parameters galleryResourceGroup=${{ parameters.galleryresourcegroup }} galleryName=${{ parameters.galleryname }} galleryImageDefinitionName=${{ parameters.galleryimagedefinitionname }} sessionhostprefix=${{ parameters.sessionhostprefix }} sessionhostinstances=${{ parameters.sessionhostinstances }} hostpoolname=${{ parameters.hostpoolname }} sessionhostsize=${{ parameters.sessionhostsize }} administratorAccountUsername=${{ parameters.domainjoinusername }} administratorAccountPassword=${{ parameters.domainjoinpassword }} vmAdministratorAccountUsername=${{ parameters.vmlocalusername }} vmAdministratorAccountPassword=${{ parameters.vmlocalpassword }} domain=${{ parameters.domain }} ouPath=${{ parameters.oupath }} vnetResourceGroup=${{ parameters.vnetresourcegroup }} vnetName=${{ parameters.vnetname }} subnetName=${{ parameters.subnetname}} hostpoolToken=$Token vmInitialNumber${{ parameters.sessionhoststartnumber}}
