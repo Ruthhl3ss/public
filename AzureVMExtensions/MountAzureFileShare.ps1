@@ -30,6 +30,11 @@ if ($connectTestResult.TcpTestSucceeded) {
 
 If (Test-Path Z:\Office){
     Write-Host "Z: Drive Mapped" -ForegroundColor Green
+
+    If (Test-Path 'C:\Temp'){
+        New-Item -Path 'C:\temp' -itemtype Directory
+        New-Item -Path 'C:\temp\Log.txt'
+        }
 }
 Else {
     Write-Host "Drive not mapped" -ForegroundColor Red
