@@ -13,8 +13,13 @@ param (
 
 )
 
-$InstalledModules = Get-InstalledModule
+$installedPackageProvider = Get-PackageProvider
+if ($installedPackageProvider.Name -notmatch "NuGet") {
+    Install-PackageProvider -Name NuGet -force
+     Write-Host("Install powershell module NuGet")
+}
 
+$InstalledModules = Get-InstalledModule
 If ($InstalledModules.Name -notcontains 'Az.Storage'){
     Install-Module -Name Az.Storage -Force
 }
