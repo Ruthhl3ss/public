@@ -13,6 +13,12 @@ param (
 
 )
 
+$InstalledModules = Get-InstalledModule
+
+If ($InstalledModules.Name -notcontains 'Az.Storage'){
+    Install-Module -Name Az.Storage -Force
+}
+
 ## Get StorageAccountKey
 $storageAccountKey = Get-AzStorageAccountKey -ResourceGroupName $storageaccountrgname -AccountName $storageaccountname
 
