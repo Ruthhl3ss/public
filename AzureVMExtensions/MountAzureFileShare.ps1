@@ -9,20 +9,36 @@ param (
     $storageaccountname,
     [Parameter()]
     [string]
-    $filesharename
+    $filesharename,
+    [Parameter()]
+    [string]
+    $AzureUsername,
+    [Parameter()]
+    [string]
+    $AzurePassword
 
 )
-
+## Install Mpdules
 $installedPackageProvider = Get-PackageProvider
 if ($installedPackageProvider.Name -notmatch "NuGet") {
     Install-PackageProvider -Name NuGet -force
      Write-Host("Install powershell module NuGet")
 }
-
+$InstalledModules = Get-InstalledModule
+If ($InstalledModules.Name -notcontains 'Az.Accounts'){
+    Install-Module -Name Az.Accounts -Force
+}
 $InstalledModules = Get-InstalledModule
 If ($InstalledModules.Name -notcontains 'Az.Storage'){
     Install-Module -Name Az.Storage -Force
 }
+##Connect to Azure
+$secret = ConvertTo-SecureString -String "$AzurePassword" -AsPlainText -Force
+$username = "$AzureUsername"
+$Credential = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $username, $secret 
+
+Connect-AzAccount -Credential $Credential #-Tenant "" -ServicePrincipal
+
 
 ## Get StorageAccountKey
 $storageAccountKey = Get-AzStorageAccountKey -ResourceGroupName $storageaccountrgname -AccountName $storageaccountname
