@@ -1,0 +1,67 @@
+{
+    "variables": {
+      "client_id": "",
+      "client_secret": "",
+
+      "agent_images": "",
+      "az_tenant_id": "{{env `az_tenant_id`}}",
+      "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
+  
+      "packaged_app_installs_path": "{{env `packaged_app_installs_path`}}",
+  
+      "Build_DefinitionName": "{{env `Build_DefinitionName`}}",
+      "Build_BuildNumber": "{{env `Build_BuildNumber`}}"
+    },
+    "builders": [
+      {
+        "type": "azure-arm",
+          
+        "client_id": "{{user `client_id`}}",
+        "client_secret": "{{user `client_secret`}}",
+        "tenant_id": "{{user `az_tenant_id`}}",
+        "subscription_id": "{{user `subscription_id`}}",
+  
+        "os_type": "Windows",
+        "managed_image_name": "{{user `Build_DefinitionName` | clean_image_name}}-{{isotime \"2006-01-02-1504\"}}-Build{{user `Build_BuildNumber`}}",
+        "managed_image_resource_group_name": "{{user `agent_images`}}",
+        
+        "image_publisher": "MicrosoftWindowsServer",
+        "image_offer": "WindowsServer",
+        "image_sku": "2019-Datacenter",
+        "communicator": "winrm",
+        "winrm_use_ssl": "true",
+        "winrm_insecure": "true",
+        "winrm_timeout": "10m",
+        "winrm_username": "packer",
+    
+        "managed_image_storage_account_type": "Premium_LRS",
+        "temp_resource_group_name": "",
+        "virtual_network_name": "",
+        "virtual_network_subnet_name": "",
+        "private_virtual_network_with_public_ip": "True",
+        "virtual_network_resource_group_name": "",
+        "azure_tags": {
+            "Project": ""
+        },
+        
+        "location": "West Europe",
+        "vm_size": "Standard_D4s_v3",
+    
+        "async_resourcegroup_delete":true
+      }
+    ],
+    
+    "provisioners": [
+      {
+        "type": "windows-restart",
+        "restart_check_command": "powershell -command \"& {Write-Output 'restarted.'}\""
+      },
+      {
+          "type": "powershell",
+          "inline": [
+            "C:\\Windows\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit",
+            "while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }"
+          ]
+      }
+    ]
+  }
