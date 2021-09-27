@@ -89,7 +89,7 @@ if (Test-Path 'C:\ProgramData\AppDeployment\SQLODBC\VC_redist.x64.exe') {
     #Check If Installation has succeeded
     $InstalledApplications = Get-WmiObject Win32_Product
 
-    if ($InstalledApplications.IdentifyingNumber -contains '{65835E57-3712-4382-990A-8D39008A8E0B}') {
+    if ($InstalledApplications.IdentifyingNumber -contains '{6CD9E9ED-906D-4196-8DC3-F987D2F6615F}') {
         Write-Log 'Microsoft Visual C++ 2017 X64 Runtime installed succesfully' -Level info
     }
     Else {
