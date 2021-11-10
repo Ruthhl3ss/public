@@ -98,7 +98,7 @@ if ($PackageType -eq "MSI") {
     $DetectionRule = New-IntuneWin32AppDetectionRuleMSI -ProductCode $IntuneWinMetaData.ApplicationInfo.MsiInfo.MsiProductCode -ProductVersionOperator "greaterThanOrEqual" -ProductVersion $IntuneWinMetaData.ApplicationInfo.MsiInfo.MsiProductVersion
 
     # Add new MSI Win32 app
-    Add-IntuneWin32App -FilePath $IntuneWinFile -DisplayName $DisplayName -Description $PackageName -Publisher $Publisher -InstallExperience "system" -RestartBehavior "suppress" -DetectionRule $DetectionRule -Verbose
+    Add-IntuneWin32App -FilePath $IntuneWinFile.FullName -DisplayName $DisplayName -Description $PackageName -Publisher $Publisher -InstallExperience "system" -RestartBehavior "suppress" -DetectionRule $DetectionRule -Verbose
 
     ## Assigment
     If ($Assignment -eq "All Users"){
