@@ -24,7 +24,25 @@ param (
     $UninstallArgs,
     [Parameter()]
     [String]
-    $DetectionArgs
+    $DetectionArgs,
+    [Parameter()]
+    [bool]
+    $AuthTypeSPN = $False,
+    [Parameter()]
+    [string]
+    $TenantID,
+    [Parameter()]
+    [string]
+    $ClientID,
+    [Parameter()]
+    [string]
+    $ClientSecret,
+    [Parameter()]
+    [string]
+    $Thumbprint,   
+    [Parameter()]
+    [string]
+    $ModuleLocation
 )
 
 ## Create Folders
@@ -55,13 +73,26 @@ if ($InstalledModules.Name -notcontains "AzureAD") {
 Else {
     Write-Host "Powershell module for Azure AD is already installed"
 }
-if ($InstalledModules.Name -notcontains "IntuneWin32App") {
-    Write-Host("Install powershell module IntuneWin32App")
-    Install-Module IntuneWin32App -Force -AllowClobber -AcceptLicense
+if ($AuthTypeSPN -eq $False) {
+    if ($InstalledModules.Name -notcontains "IntuneWin32App") {
+        Write-Host("Install powershell module IntuneWin32App")
+        Install-Module IntuneWin32App -Force -AllowClobber -AcceptLicense
+    }
+    Else {
+        Write-Host "Powershell module for IntuneWin32App is already installed"
+    }
 }
-Else {
-    Write-Host "Powershell module for IntuneWin32App is already installed"
+if ($AuthTypeSPN -eq $True) {
+    If ($PSVersionTable.PSVersion.Major -eq 7){
+        Write-Host "Using Powershell 7, import IntuneWin32App Module as Powershell 5"
+        Import-Module $ModuleLocation -UseWindowsPowershell
+    }
+    If ($PSVersionTable.PSVersion.Major -eq 5){
+        Write-Host "Using Powershell 5, import IntuneWin32App Module normally"
+        Import-Module $ModuleLocation
+    } 
 }
+
 
 ##############
 
@@ -82,9 +113,18 @@ if ($PackageType -eq "MSI") {
     $OutputFolder = "C:\Packaging\$($PackageName)\Output"
     New-IntuneWin32AppPackage -SourceFolder $SourceFolder -SetupFile $SetupFile -OutputFolder $OutputFolder -Verbose
 
-    ### Connect to MS Graph
+    ### Connect to MS Graph - Default is authentication prompt set parameter $AuthTypeSPN to True to use Service Principal
+    if ($AuthTypeSPN -eq $False) {
+        
+        Connect-MSIntuneGraph -TenantID $TenantName
 
-    Connect-MSIntuneGraph -TenantID $TenantName
+    }
+    if ($AuthTypeSPN -eq $True) {
+        
+        Connect-MSIntuneGraph -TenantID $TenantID -ClientID $ClientID -ClientSecret $ClientSecret
+
+    }
+    
     ###
 
     $IntuneWinFile = Get-ChildItem -Path  "C:\Packaging\$($PackageName)\Output"
@@ -98,7 +138,7 @@ if ($PackageType -eq "MSI") {
     $DetectionRule = New-IntuneWin32AppDetectionRuleMSI -ProductCode $IntuneWinMetaData.ApplicationInfo.MsiInfo.MsiProductCode -ProductVersionOperator "greaterThanOrEqual" -ProductVersion $IntuneWinMetaData.ApplicationInfo.MsiInfo.MsiProductVersion
 
     # Add new MSI Win32 app
-    Add-IntuneWin32App -FilePath $IntuneWinFile.FullName -DisplayName $DisplayName -Description $PackageName -Publisher $Publisher -InstallExperience "system" -RestartBehavior "suppress" -DetectionRule $DetectionRule -Verbose
+    Add-IntuneWin32App -FilePath $IntuneWinFile.name -DisplayName $DisplayName -Description $PackageName -Publisher $Publisher -InstallExperience "system" -RestartBehavior "suppress" -DetectionRule $DetectionRule -Verbose
 
     ## Assigment
     If ($Assignment -eq "All Users"){
@@ -131,8 +171,18 @@ if ($PackageType -eq "MSI") {
             Write-Host "Using Powershell 5, import Azure AD Module normally"
             Import-Module AzureAD
         }      
+        ### Connect to Azure AD - Default is authentication prompt set parameter $AuthTypeSPN to True to use Service Principal
+        if ($AuthTypeSPN -eq $False) {
+            
+            Connect-AzureAD
+
+        }
+        if ($AuthTypeSPN -eq $True) {
+            
+            Connect-AzureAD -TenantId $TenantId -ApplicationId $ClientID -CertificateThumbprint $Thumbprint
+
+        }
         
-        Connect-AzureAD
 
         $ExistingAzureADGroups = Get-AzureADGroup
 
@@ -153,8 +203,8 @@ if ($PackageType -eq "MSI") {
     }
     #CleanUp
     if (Test-Path C:\Packaging\$PackageName) {
-        Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
-        Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
+       Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
+       Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
     }
     }
 
@@ -188,7 +238,16 @@ if ($PackageType -eq "EXE") {
     
     ### Connect to MS Graph
 
-    Connect-MSIntuneGraph -TenantID $TenantName
+    if ($AuthTypeSPN -eq $False) {
+        
+        Connect-MSIntuneGraph -TenantID $TenantName
+
+    }
+    if ($AuthTypeSPN -eq $True) {
+        
+        Connect-MSIntuneGraph -TenantID $TenantID -ClientID $ClientID -ClientSecret $ClientSecret
+
+    }
     ###
     # Get MSI meta data from .intunewin file
     $IntuneWinFile = Get-ChildItem -Path  "C:\Packaging\$($PackageName)\Output" 
@@ -239,7 +298,16 @@ if ($PackageType -eq "EXE") {
             Import-Module AzureAD
         }      
         
-        Connect-AzureAD
+        if ($AuthTypeSPN -eq $False) {
+            
+            Connect-AzureAD
+
+        }
+        if ($AuthTypeSPN -eq $True) {
+            
+            Connect-AzureAD -TenantId $TenantId -ApplicationId $ClientID -CertificateThumbprint $Thumbprint
+
+        }
 
         $ExistingAzureADGroups = Get-AzureADGroup
 
