@@ -1,0 +1,33 @@
+trigger: none
+
+pool:
+  name: 'NKO Agents'
+
+variables:
+- group: AzureKeyVault
+
+parameters:
+- name: packagetype
+  displayName: Package Type MSI or EXE
+  type: string
+- name: packagename
+  displayName: DisplayName of the Package
+  type: string
+- name: downloadurl
+  displayName: Download URL of the Application
+  type: string
+- name: assigment
+  displayName: Assignment Type (All Users or Devices or Custom)
+  type: string
+  default: All Devices
+- name: installargs
+  displayName: Install Arguments (Only needed for EXE)
+  type: string
+- name: uninstallargs
+  displayName: UnInstall Arguments (Only needed for EXE)
+  type: string
+- name: detectionargs
+  displayName: Detection Arguments (Only needed for EXE)
+  type: string
+
+
