@@ -1,7 +1,7 @@
 trigger: none
 
 pool:
-  name: 'NKO Agents'
+  name: 'YOUR AGENT POOL NAME'
 
 variables:
 - group: AzureKeyVault
