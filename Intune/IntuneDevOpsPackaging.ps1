@@ -73,6 +73,14 @@ if ($InstalledModules.Name -notcontains "AzureAD") {
 Else {
     Write-Host "Powershell module for Azure AD is already installed"
 }
+$InstalledModules = Get-InstalledModule
+if ($InstalledModules.Name -notcontains "MSAL.PS") {
+    Write-Host("Install powershell module MSAL.PS")
+    Install-Module MSAL.PS -Force -AllowClobber
+}
+Else {
+    Write-Host "Powershell module for MSAL.PS is already installed"
+}
 if ($AuthTypeSPN -eq $False) {
     if ($InstalledModules.Name -notcontains "IntuneWin32App") {
         Write-Host("Install powershell module IntuneWin32App")
@@ -138,7 +146,7 @@ if ($PackageType -eq "MSI") {
     $DetectionRule = New-IntuneWin32AppDetectionRuleMSI -ProductCode $IntuneWinMetaData.ApplicationInfo.MsiInfo.MsiProductCode -ProductVersionOperator "greaterThanOrEqual" -ProductVersion $IntuneWinMetaData.ApplicationInfo.MsiInfo.MsiProductVersion
 
     # Add new MSI Win32 app
-    Add-IntuneWin32App -FilePath $IntuneWinFile.name -DisplayName $DisplayName -Description $PackageName -Publisher $Publisher -InstallExperience "system" -RestartBehavior "suppress" -DetectionRule $DetectionRule -Verbose
+    Add-IntuneWin32App -FilePath $IntuneWinFile.Fullname -DisplayName $DisplayName -Description $PackageName -Publisher $Publisher -InstallExperience "system" -RestartBehavior "suppress" -DetectionRule $DetectionRule -Verbose
 
     ## Assigment
     If ($Assignment -eq "All Users"){
