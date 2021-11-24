@@ -42,7 +42,10 @@ param (
     $Thumbprint,   
     [Parameter()]
     [string]
-    $ModuleLocation
+    $ModuleLocation,
+    [Parameter()]
+    [bool]
+    $Cleanup = $True
 )
 
 ## Create Folders
@@ -210,10 +213,16 @@ if ($PackageType -eq "MSI") {
 
     }
     #CleanUp
-    if (Test-Path C:\Packaging\$PackageName) {
-       Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
-       Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
+    if ($Cleanup -eq $True) {
+        if (Test-Path C:\Packaging\$PackageName) {
+            Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
+            Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
+         }
     }
+    else {
+        Write-Host "CleanUp is not requested."
+    }
+
     }
 
 ##############
@@ -335,9 +344,14 @@ if ($PackageType -eq "EXE") {
 
     }
     #CleanUp
-    if (Test-Path C:\Packaging\$PackageName) {
-        Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
-        Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
+    if ($Cleanup -eq $True) {
+        if (Test-Path C:\Packaging\$PackageName) {
+            Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
+            Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
+         }
+    }
+    else {
+        Write-Host "CleanUp is not requested."
     }
     }
 
