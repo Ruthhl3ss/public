@@ -8,6 +8,8 @@ pool:
 
 variables:
 - group: AzureKeyVault
+- group: StorageAccountVariables
+
 
 parameters:
 - name: packagetype
@@ -51,4 +53,4 @@ stages:
         scriptType: 'ps'
         scriptLocation: 'scriptPath'
         scriptPath: 'IntunePackaging/IntuneDevOpsPackaging.ps1'
-        arguments: '-PackageType ${{  parameters.packagetype }} -PackageName ${{  parameters.packagename }} -DownloadURL ${{  parameters.downloadurl }} -Assignment ${{  parameters.assignment }} -InstallArgs ${{  parameters.installargs }} -UninstallArgs ${{  parameters.uninstallargs }} -DetectionArgs ${{  parameters.detectionargs }} -AuthTypeSPN $True -TenantID $(TenantID) -ClientID $(ClientID) -ClientSecret $(Secret) -Thumbprint $(Thumbprint) -ModuleLocation ${{  parameters.modulelocation }} -Cleanup $false'
+        arguments: '-PackageType ${{  parameters.packagetype }} -PackageName ${{  parameters.packagename }} -DownloadURL ${{  parameters.downloadurl }} -Assignment ${{  parameters.assignment }} -InstallArgs ${{  parameters.installargs }} -UninstallArgs ${{  parameters.uninstallargs }} -DetectionArgs ${{  parameters.detectionargs }} -AuthTypeSPN $True -TenantID $(TenantID) -ClientID $(ClientID) -ClientSecret $(Secret) -Thumbprint $(Thumbprint) -ModuleLocation ${{  parameters.modulelocation }} -Upload $True -RGName $(RGName) -StorageAccountName $(StorageAccountName) -ContainerName $(ContainerName)'
