@@ -1,0 +1,54 @@
+
+name: IntunePackaging-WithUpload
+
+trigger: none
+
+pool:
+  name: 'NKO-Agents'
+
+variables:
+- group: AzureKeyVault
+
+parameters:
+- name: packagetype
+  displayName: Package Type MSI or EXE
+  type: string
+- name: packagename
+  displayName: DisplayName of the Package
+  type: string
+- name: downloadurl
+  displayName: Download URL of the Application
+  type: string
+- name: assignment
+  displayName: Assignment Type (All Users or All Devices or Custom)
+  type: string
+  default: "All Devices"
+- name: modulelocation
+  displayName: Location of Custom Module on Agent (TEMP)
+  type: string
+- name: installargs
+  displayName: Install Arguments (Only needed for EXE)
+  type: string
+  default: OnlyForExe
+- name: uninstallargs
+  displayName: UnInstall Arguments (Only needed for EXE)
+  type: string
+  default: OnlyForExe
+- name: detectionargs
+  displayName: Detection Arguments (Only needed for EXE)
+  type: string
+  default: OnlyForExe
+
+
+stages:
+- stage: ApplicationPackaging
+  jobs:
+  - job: ApplicationPackaging
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'WVDSpokeSub'
+        scriptType: 'ps'
+        scriptLocation: 'scriptPath'
+        scriptPath: 'IntunePackaging/IntuneDevOpsPackaging.ps1'
+        arguments: '-PackageType ${{  parameters.packagetype }} -PackageName ${{  parameters.packagename }} -DownloadURL ${{  parameters.downloadurl }} -Assignment ${{  parameters.assignment }} -InstallArgs ${{  parameters.installargs }} -UninstallArgs ${{  parameters.uninstallargs }} -DetectionArgs ${{  parameters.detectionargs }} -AuthTypeSPN $True -TenantID $(TenantID) -ClientID $(ClientID) -ClientSecret $(Secret) -Thumbprint $(Thumbprint) -ModuleLocation ${{  parameters.modulelocation }} -Cleanup $false'
