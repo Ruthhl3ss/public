@@ -66,6 +66,12 @@ if (!(Test-Path C:\Packaging\$PackageName)) {
     Write-Host "Creating new folder C:\Packaging\$($PackageName)"
     New-Item -Path C:\Packaging\$PackageName -ItemType Directory
 }
+else {
+    Write-Host "Folder Already exists, removing it first."
+    Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
+    Write-Host "Creating new folder C:\Packaging\$($PackageName)"
+    New-Item -Path C:\Packaging\$PackageName -ItemType Directory
+}
 if (!(Test-Path C:\Packaging\$PackageName\Input)) {
     Write-Host "Creating new folder C:\Packaging\$($PackageName)\Input"
     New-Item -Path C:\Packaging\$PackageName\Input -ItemType Directory
