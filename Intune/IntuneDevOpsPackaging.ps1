@@ -45,7 +45,16 @@ param (
     $ModuleLocation,
     [Parameter()]
     [bool]
-    $Cleanup = $True
+    $Upload = $False,
+    [Parameter()]
+    [string]
+    $RGName,
+    [Parameter()]
+    [string]
+    $StorageAccountName,
+    [Parameter()]
+    [string]
+    $ContainerName
 )
 
 ## Create Folders
@@ -212,15 +221,27 @@ if ($PackageType -eq "MSI") {
         Add-IntuneWin32AppAssignmentGroup -Include -ID $Win32App.id -GroupID $GroupID.ObjectID -Intent "available" -Notification "showAll" -Verbose
 
     }
-    #CleanUp
-    if ($Cleanup -eq $True) {
+    #CleanUp or upload
+    if ($Upload -eq $False) {
         if (Test-Path C:\Packaging\$PackageName) {
             Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
             Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
          }
     }
     else {
-        Write-Host "CleanUp is not requested."
+
+        $SourcePath = "C:\Packaging\$($PackageName)"
+
+        Write-Host "Upload is requested"
+
+        $GetKey = az storage account keys list --resource-group $RGName --account-name $StorageAccountName
+        $StorageAccountKey = $GetKey | ConvertFrom-Json
+
+        az storage blob upload-batch --destination $ContainerName `
+                                    --account-name $StorageAccountName `
+                                    --account-key $StorageAccountKey.Value[0] `
+                                    --destination-path $PackageName `
+                                    --source $SourcePath
     }
 
     }
@@ -343,16 +364,26 @@ if ($PackageType -eq "EXE") {
         Add-IntuneWin32AppAssignmentGroup -Include -ID $Win32App.id -GroupID $GroupID.ObjectID -Intent "available" -Notification "showAll" -Verbose
 
     }
-    #CleanUp
-    if ($Cleanup -eq $True) {
+    #CleanUp or upload
+    if ($Upload -eq $False) {
         if (Test-Path C:\Packaging\$PackageName) {
             Write-Host "Cleaning Up folder C:\Packaging\$($PackageName)"
             Remove-Item -Path C:\Packaging\$PackageName -Recurse -Force
          }
     }
     else {
-        Write-Host "CleanUp is not requested."
-    }
-    }
 
-    
+        $SourcePath = "C:\Packaging\$($PackageName)"
+
+        Write-Host "Upload is requested"
+
+        $GetKey = az storage account keys list --resource-group $RGName --account-name $StorageAccountName
+        $StorageAccountKey = $GetKey | ConvertFrom-Json
+
+        az storage blob upload-batch --destination $ContainerName `
+                                    --account-name $StorageAccountName `
+                                    --account-key $StorageAccountKey.Value[0] `
+                                    --destination-path $PackageName `
+                                    --source $SourcePath
+    }
+}    
