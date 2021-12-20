@@ -1,0 +1,61 @@
+trigger: none
+
+pool:
+  name: 'AGENT POOL NAME'
+
+variables:
+- group: 'PackerVariables'
+- group: 'YOUR VARIABLE GROUP (KEYVAULT)'
+
+stages:
+- stage: CreateResourceGroup
+  jobs:
+  - job: CreateResourceGroup
+    steps:
+    - task: AzureResourceManagerTemplateDeployment@3
+      inputs:
+        deploymentScope: 'Resource Group'
+        azureResourceManagerConnection: '$(ServiceConnectionName)'
+        subscriptionId: '$(ARM_Subscription_ID)'
+        action: 'Create Or Update Resource Group'
+        resourceGroupName: '$(resourcegroupname)'
+        location: '$(Location)'
+        templateLocation: 'Linked artifact'
+        csmFile: 'ARMTemplates/EmptyResourceGroup.json'
+        deploymentMode: 'Incremental'
+
+- stage: RunPacker
+  jobs:
+  - job: CreateImage
+    steps:
+    - task: riezebosch.Packer.PackerTool.PackerTool@0
+      displayName: 'Use Packer Latest'
+
+    - task: riezebosch.Packer.Packer.Packer@1
+      displayName: 'Packer version'
+      inputs:
+        azureSubscription: '$(ServiceConnectionName)'
+        templatePath: 'Packer/Windows10AVDImage.pkr.hcl'
+        command: version
+
+    - task: riezebosch.Packer.Packer.Packer@1
+      displayName: 'Packer init'
+      inputs:
+        azureSubscription: '$(ServiceConnectionName)'
+        templatePath: 'Packer/Windows10AVDImage.pkr.hcl'
+        command: init
+
+    - task: riezebosch.Packer.Packer.Packer@1
+      displayName: 'Packer validate'
+      inputs:
+        azureSubscription: '$(ServiceConnectionName)'
+        templatePath: 'Packer/Windows10AVDImage.pkr.hcl'
+        command: validate
+        variables-file: 'Packer/Windows10AVDVariables.pkr.hcl'
+
+    - task: riezebosch.Packer.Packer.Packer@1
+      displayName: 'Packer build'
+      inputs:
+        azureSubscription: '$(ServiceConnectionName)'
+        templatePath: 'Packer/Windows10AVDImage.pkr.hcl'
+        variables-file: 'Packer/Windows10AVDVariables.pkr.hcl'
