@@ -38,6 +38,11 @@ variable "managed_image_resource_group_name" {
   default = ""
 }
 
+variable "private_virtual_network_with_public_ip" {
+  type    = string
+  default = ""
+}
+
 variable "offer" {
   type    = string
   default = "Windows-10"
@@ -95,7 +100,7 @@ source "azure-arm" "windowsvm" {
   managed_image_name                      = var.managed_image_name
   managed_image_resource_group_name       = var.managed_image_resource_group_name
   os_type                                 = "Windows"
-  private_virtual_network_with_public_ip  = "false"
+  private_virtual_network_with_public_ip  = var.private_virtual_network_with_public_ip
   virtual_network_name                    = var.virtual_network_name
   virtual_network_resource_group_name     = var.virtual_network_resource_group_name
   virtual_network_subnet_name             = var.virtual_network_subnet_name
