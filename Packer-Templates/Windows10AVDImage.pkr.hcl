@@ -95,7 +95,7 @@ source "azure-arm" "windowsvm" {
   managed_image_name                      = var.managed_image_name
   managed_image_resource_group_name       = var.managed_image_resource_group_name
   os_type                                 = "Windows"
-  private_virtual_network_with_public_ip  = var.private_virtual_network_with_public_ip
+  private_virtual_network_with_public_ip  = "false"
   virtual_network_name                    = var.virtual_network_name
   virtual_network_resource_group_name     = var.virtual_network_resource_group_name
   virtual_network_subnet_name             = var.virtual_network_subnet_name
