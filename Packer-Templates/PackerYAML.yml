@@ -21,7 +21,7 @@ stages:
         resourceGroupName: '$(resourcegroupname)'
         location: '$(Location)'
         templateLocation: 'Linked artifact'
-        csmFile: 'ARMTemplates/EmptyResourceGroup.json'
+        csmFile: 'Packer/EmptyResourceGroup.json'
         deploymentMode: 'Incremental'
 
 - stage: RunPacker
