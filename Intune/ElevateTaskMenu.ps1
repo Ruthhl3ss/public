@@ -54,37 +54,31 @@ if ($result -eq [System.Windows.Forms.DialogResult]::OK)
             $startWithElevatedRights = "compmgmt.msc"
             $Credential = Get-Credential
             Start-Process -PassThru -FilePath powershell -Credential $credential -windowstyle hidden -ArgumentList '-noprofile -command &{Start-Process ',  $startWithElevatedRights, '-Wait -verb runas}'
-            Break
         }
         Explorer{
             $startWithElevatedRights = "Explorer.exe"
             $Credential = Get-Credential
             Start-Process -PassThru -FilePath powershell -Credential $credential -windowstyle hidden -ArgumentList '-noprofile -command &{Start-Process ',  $startWithElevatedRights, '-Wait -verb runas}'
-            Break
         }
         Powershell{
             $startWithElevatedRights = "Powershell.exe"
             $Credential = Get-Credential
             Start-Process -PassThru -FilePath powershell -Credential $credential -windowstyle hidden -ArgumentList '-noprofile -command &{Start-Process ',  $startWithElevatedRights, '-Wait -verb runas}'
-            Break
         }
         ProgramsAndFeatures{
             $startWithElevatedRights = "appwiz.cpl"
             $Credential = Get-Credential
             Start-Process -PassThru -FilePath powershell -Credential $credential -windowstyle hidden -ArgumentList '-noprofile -command &{Start-Process ',  $startWithElevatedRights, '-Wait -verb runas}'
-            Break
         }
         Services{
             $startWithElevatedRights = "services.msc"
             $Credential = Get-Credential
             Start-Process -PassThru -FilePath powershell -Credential $credential -windowstyle hidden -ArgumentList '-noprofile -command &{Start-Process ',  $startWithElevatedRights, '-Wait -verb runas}'
-            Break
         }
         TaskScheduler{
             $startWithElevatedRights = "taskschd.msc"
             $Credential = Get-Credential
             Start-Process -PassThru -FilePath powershell -Credential $credential -windowstyle hidden -ArgumentList '-noprofile -command &{Start-Process ',  $startWithElevatedRights, '-Wait -verb runas}'
-            Break
         }
         Default {
             Write-Host "No Application Selected"
