@@ -38,7 +38,6 @@ param subnetName string = ''
 param location string = resourceGroup().location
 
 //HostPool parameters
-
 param hostpoolToken string = ''
 param hostpoolname string = ''
 
