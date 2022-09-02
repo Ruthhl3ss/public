@@ -23,7 +23,7 @@ else {
 }
 
 #Importing Module
-Write-Host 'Importing Module Azure AD Preview'
+Write-Host 'Importing Module Azure AD  Preview'
 Import-Module AzureADPreview
 
 #Connecting to Azure AD to Create the Group
