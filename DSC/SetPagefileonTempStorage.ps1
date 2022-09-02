@@ -8,7 +8,7 @@ configuration SetPageFile
             RebootNodeIfNeeded = $true
             ConfigurationMode = "ApplyOnly"
         }
-    #Get LogicDisks for machine with Temporary Disks
+        #Get LogicDisks for machine with Temporary Disks
         $LogicalDisks = Get-WmiObject Win32_LogicalDisk | Where-Object VolumeName -EQ 'Temporary Storage'
 
         #Set Pagefile on Temp disk if exists
