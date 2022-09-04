@@ -1,6 +1,8 @@
-$Path = Get-Item "C:\Users\Public\Desktop\test.txt"
+$Path = "C:\Users\Public\Desktop\test.txt"
 
-If (!(Test-Path -Path $Path)) {
+$Test = Test-Path -Path $Path -ErrorAction SilentlyContinue
+
+If ($Test -eq $False) {
     try {
         New-Item -Path $Path -ItemType File
     }
