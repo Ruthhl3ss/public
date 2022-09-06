@@ -1,7 +1,6 @@
 configuration SetPageFile
 {
-    Import-DscResource -ModuleName PSDscResources
-    
+      
     Node localhost
     {
         
