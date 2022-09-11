@@ -43,7 +43,6 @@ $AssignBodyJSONPath = "E:\GIT\Demo\Settings Catalog\Assignments\Windows 10 - Dis
 
 $configurationPolicyAssignments = Get-Content -LiteralPath $AssignBodyJSONPath | ConvertFrom-Json
 
-
 # Create the base requestBody
 $requestBody = @{
     assignments = @()
