@@ -66,6 +66,6 @@ IF ($PackageName){
     }
 }
 Else {
-    Write-Host "Package $($PackageName) Already Installed" -ForegroundColor Yellow
+    Write-Host "Package $($PackageName) not available" -ForegroundColor Yellow
 }
 Stop-Transcript
