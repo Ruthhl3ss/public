@@ -35,7 +35,7 @@ If($AppInstaller.Version -lt "2022.506.16.0") {
         Add-ProvisionedAppxPackage -online -PackagePath:.\Winget.msixbundle -DependencyPackagePath .\Microsoft.VCLibs.x64.14.00.Desktop.appx,.\microsoft.ui.xaml.2.7.0\tools\AppX\x64\Release\Microsoft.UI.Xaml.2.7.Appx -SkipLicense
 
         Write-Host "Starting sleep for Winget to initiate" -Foregroundcolor Yellow
-        Start-Sleep 5
+        Start-Sleep 2
     }
     Catch {
         Throw "Failed to install Winget"
@@ -50,7 +50,16 @@ Else {
 IF ($PackageName){
     try {
         Write-Host "Installing $($PackageName) via Winget" -ForegroundColor Green
-        winget install $PackageName --silent --accept-source-agreements --accept-package-agreements
+
+        $ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe"
+        if ($ResolveWingetPath){
+            $WingetPath = $ResolveWingetPath[-1].Path
+        }
+
+        $config
+        cd $wingetpath
+
+        .\winget.exe install $PackageName --silent --accept-source-agreements --accept-package-agreements
     }
     Catch {
         Throw "Failed to install package $($_)"
