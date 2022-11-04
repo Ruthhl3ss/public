@@ -18,8 +18,11 @@ if ($InstalledApps) {
     try {        
         $ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe"
         if ($ResolveWingetPath){
-            cd $ResolveWingetPath
+               $WingetPath = $ResolveWingetPath[-1].Path
         }
+    
+        $config
+        cd $wingetpath
 
         .\winget.exe uninstall $PackageName --silent
     }
