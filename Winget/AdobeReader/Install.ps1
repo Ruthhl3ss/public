@@ -51,7 +51,7 @@ IF ($PackageName){
     try {
         Write-Host "Installing $($PackageName) via Winget" -ForegroundColor Green
 
-        $ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe"
+        $ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_2022.*"
         if ($ResolveWingetPath){
             $WingetPath = $ResolveWingetPath[-1].Path
         }

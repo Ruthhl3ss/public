@@ -1,7 +1,7 @@
 #Fill this variable with the Winget package ID
 $PackageName = "Adobe.Acrobat.Reader.64-bit"
 
-$ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe"
+$ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_2022.*"
 if ($ResolveWingetPath){
     $WingetPath = $ResolveWingetPath[-1].Path
 }
