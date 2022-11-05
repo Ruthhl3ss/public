@@ -9,7 +9,7 @@ $ResolveWingetPath = Resolve-Path "C:\Program Files\WindowsApps\Microsoft.Deskto
 $config
 cd $wingetpath
 
-$InstalledApps = .\winget.exe winget list --id $PackageName
+$InstalledApps = .\winget.exe list --id $PackageName
 
 if ($InstalledApps) {
     Write-Host "$($PackageName) is installed"
