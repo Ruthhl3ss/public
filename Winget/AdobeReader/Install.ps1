@@ -2,10 +2,6 @@ $PackageName = "Adobe.Acrobat.Reader.64-bit"
 
 $AppInstaller = Get-AppxProvisionedPackage -Online | Where-Object DisplayName -eq Microsoft.DesktopAppInstaller
 
-#Creating Loggin Folder
-if (!(Test-Path -Path C:\ProgramData\WinGetLogs)) {
-    New-Item -Path C:\ProgramData\WinGetLogs -Force -ItemType Directory
-}
 #Start Logging
 Start-Transcript -Path "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\$($PackageName)_Install.log" -Append
 
