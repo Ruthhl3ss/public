@@ -7,7 +7,7 @@ if (!(Test-Path -Path C:\ProgramData\WinGetLogs)) {
     New-Item -Path C:\ProgramData\WinGetLogs -Force -ItemType Directory
 }
 #Start Logging
-Start-Transcript -Path "C:\ProgramData\WinGetLogs\$($PackageName).log" -Append
+Start-Transcript -Path "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\$($PackageName)_Install.log" -Append
 
 If($AppInstaller.Version -lt "2022.506.16.0") {
 

@@ -6,7 +6,7 @@ if (!(Test-Path -Path C:\ProgramData\WinGetLogs)) {
     New-Item -Path C:\ProgramData\WinGetLogs -Force -ItemType Directory
 }
 #Start Logging
-Start-Transcript -Path "C:\ProgramData\WinGetLogs\$($PackageName)_Uninstall.log" -Append
+Start-Transcript -Path "C:\C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\$($PackageName)_Uninstall.log" -Append
 
 #Detect Apps
 $InstalledApps = winget list --id $PackageName
