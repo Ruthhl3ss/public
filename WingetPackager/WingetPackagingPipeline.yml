@@ -1,0 +1,33 @@
+trigger: none
+
+pool:
+  name: YOURAGENTPOOL
+
+variables:
+- group: YOURVARIABLEGROUP
+
+parameters:
+- name: customername
+  displayName: Customer Name (Select from dropdown)
+  type: string
+  values:
+  - 'NKOLAB'
+  - 'StefanLAB'
+- name: packageid
+  displayName: Package ID (Winget Package ID)
+  type: string
+  default: 'Adobe.Acrobat.Reader.64-bit'
+
+
+stages:
+- stage: AutoPilotProfile
+  jobs:
+  - job: IntuneDeployment
+    steps:
+    - task: PowerShell@2
+      inputs:
+        pwsh: true
+        targetType: 'inline'
+        script: |
+
+          Powershell\Winget-Intune_Package_Demo.ps1 -packageid ${{parameters.packageid}} -TenantId $(${{parameters.customername}}-TenantID) -ClientId $(${{parameters.customername}}-ClientID) -ClientSecret $(${{parameters.customername}}-ClientSecret)
