@@ -24,7 +24,7 @@ if ($InstalledApps) {
         $config
         cd $wingetpath
 
-        .\winget.exe uninstall $PackageName --silent
+        & $WingetPath\winget.exe uninstall $PackageName --silent
     }
     catch {
         Throw "Failed to uninstall $($PackageName)"
