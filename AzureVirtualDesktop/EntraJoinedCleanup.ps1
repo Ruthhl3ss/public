@@ -2,13 +2,13 @@
 ############################################################################
 # Start Region: Azure Virtual Desktop
 ############################################################################
-$TenantID = "1cb16a89-a37e-41c1-a1ac-b629f2f25125"
-$ClientID = "3a93df3e-a713-4700-b750-0898479e09fa"
+$TenantID = ""
+$ClientID = ""
 $ClientSecret = Read-Host -Prompt "Enter Client Secret"
-$SubscriptionID = "ceb791cb-3889-4794-988c-367f7f6ff4f6"
-$Hostpoolname = "AVD-Development"
-$HostpoolRG = "RG_WE_AVD_HostPools"
-$Sessionhostrgname = "RG_WE_AVD_Development"
+$SubscriptionID = ""
+$Hostpoolname = ""
+$HostpoolRG = ""
+$Sessionhostrgname = ""
 
 Write-Output "Checking for module Az.Avd...."
 
