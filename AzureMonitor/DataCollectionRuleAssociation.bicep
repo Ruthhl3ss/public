@@ -1,5 +1,5 @@
 
-param virtualmachinename string = 'AVD-DEV-2-VM'
+param virtualmachinename string = ''
 param datacollectionrulename string = 'NielsKok.Tech_AutomatedMonitoring'
 param datacollectionruleassociationname string = 'NielsKok.Tech_AutomatedMonitoring_Association'
 
