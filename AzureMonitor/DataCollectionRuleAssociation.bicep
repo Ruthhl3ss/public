@@ -11,7 +11,7 @@ resource datacollectionrule 'Microsoft.Insights/dataCollectionRules@2022-06-01' 
   name: datacollectionrulename
 }
 
-resource datacollectionruleassociaten 'Microsoft.Insights/dataCollectionRuleAssociations@2022-06-01' = {
+resource datacollectionruleassociate 'Microsoft.Insights/dataCollectionRuleAssociations@2022-06-01' = {
   name: datacollectionruleassociationname
   scope: virtualmachine
   properties: {
