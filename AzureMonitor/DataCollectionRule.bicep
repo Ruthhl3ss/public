@@ -18,7 +18,7 @@ resource datacollectionrule 'Microsoft.Insights/dataCollectionRules@2022-06-01' 
           'Microsoft-InsightsMetrics'
         ]
         destinations: [
-          loganalytics.id
+          loganalyticsname
         ]
       }
     ]
