@@ -58,7 +58,7 @@ $APIPermissions = Import-csv -Path APIPermissions.csv
 
 foreach ($Application in $Applications) {
 
-    Write-Output "Examing Application: $($Application.displayName) "
+    Write-Output "Examining Application: $($Application.displayName) "
 
     foreach ($permission in $Application.requiredResourceAccess.resourceAccess) {
 
