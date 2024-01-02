@@ -78,6 +78,3 @@ foreach ($Application in $Applications) {
 }
 
 $Permissionstable | Export-Csv -Path ExportedAPIPermissions.csv -NoTypeInformation
-
-# OutGrid View option:
-# $Permissionstable | Out-GridView
