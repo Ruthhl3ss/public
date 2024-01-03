@@ -1,12 +1,4 @@
-Start-Transcript -Path C:\Windows\Temp\HPIA.log
-
-Set-ExecutionPolicy Bypass -Force
-
-Install-PackageProvider -name NuGet -force
-
-Import-Module -Name PowershellGet
-
-Install-Module -Name PowershellGet -Force
+Start-Transcript -Path "C:\Windows\Temp\HPIA.log"
 
 Install-Module -Name "HPCMSL" -Force -AcceptLicense
 
