@@ -50,10 +50,6 @@ By selecting a custom VHD from blob storage, you can create your own image local
   > [!WARNING]
   **Rdsh Use Managed Disks** will **not** be allowed to be **false**, starting **March 1st, 2020**.
 
-Ignore the following parameters:
-- **Rdsh Gallery Image SKU**
-- **Rdsh Custom Image Source Name**
-- **Rdsh Custom Image Source Resource Group**
 
 ### Custom Azure Image resource from a resource group
 By selecting a custom Azure Image resource from a resource group, you can create your own image locally through Hyper-V or an Azure VM but have the portability and flexibility of image management through an Azure Image resource. Enter or select values for the following parameters:
