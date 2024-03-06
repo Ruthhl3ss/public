@@ -1,4 +1,6 @@
-
+###
+### Check out this blog for usage: https://www.nielskok.tech/azure-virtual-desktop/avd-drainmode-dependent-on-compliance/
+###
 [CmdletBinding()]
 param (
     [Parameter()][string]$DeviceNames,
