@@ -5,7 +5,7 @@ $ScheduledTaskName = "NielsKokTechExample" #name of the scheduled task
 $ScheduledTime = "AtLogOn" #use "AtLogOn" or a time in format (example): 15:00 to run it at 3 pm
 
 #Start Logging
-Start-Transcript -Path "C:\ProgramData\Microsoft\IntuneMsanagementExtension\Logs\$($ScheduledTaskName)_Install.log" -Append
+Start-Transcript -Path "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\$($ScheduledTaskName)_Install.log" -Append
 
 switch ($ScheduledTime) {
     AtLogOn {  
