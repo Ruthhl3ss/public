@@ -5,7 +5,7 @@ $Groups = @(
     "FSLogix Profile Exclude List"
 )
 
-$AdminToExclude = "NKOAdmin"
+$AdminToExclude = "YourAdminUser"
 
 $Count = 0
 
