@@ -9,8 +9,6 @@ $AdminToExclude = "YourAdminUser"
 
 foreach ($Group in $Groups){
 
-    #$Object = Get-WmiObject -Query "Select * From Win32_Group" | Where-Object name -eq $Group
-
     Write-Output "Checking group $Group"
 
     $Query = net localgroup $($Group)
