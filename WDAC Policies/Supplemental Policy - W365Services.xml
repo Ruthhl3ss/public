@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Supplemental Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
+  <VersionEx>10.0.0.0</VersionEx>
+  <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
+  <PolicyID>{ED128BDD-BEFE-4286-BA17-4326A99A85BC}</PolicyID>
+  <BasePolicyID>YOUR BASEPOLICY ID</BasePolicyID>
+  <Rules>
+    <Rule>
+      <Option>Enabled:Unsigned System Integrity Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Inherit Default Policy</Option>
+    </Rule>
+    <Rule>
+      <Option>Enabled:Managed Installer</Option>
+    </Rule>
+  </Rules>
+  <EKUs />
+  <FileRules>
+    <Allow ID="ID_ALLOW_A_0" FriendlyName="C:\Package\Autofac.dll Hash Sha1" Hash="39CF3CBD6D98668034EB2572FEDEF58F0A1F33FB" />
+    <Allow ID="ID_ALLOW_A_1" FriendlyName="C:\Package\Autofac.dll Hash Sha256" Hash="69D555124DB21972B04A4065A478A059C51A2B82E86E2AAE09E84040123D4F95" />
+    <Allow ID="ID_ALLOW_A_2" FriendlyName="C:\Package\Autofac.dll Hash Page Sha1" Hash="479385F880554C9324C094D2F1F1340D59AF2384" />
+    <Allow ID="ID_ALLOW_A_3" FriendlyName="C:\Package\Autofac.dll Hash Page Sha256" Hash="96AD65FE0924856C782E03B429126DB52A7D37D7344FC9B05EC2D6F2E3C182BA" />
+  </FileRules>
+  <Signers>
+    <Signer Name="AME CS CA 01" ID="ID_SIGNER_S_3">
+      <CertRoot Type="TBS" Value="B3C1CB053296C713C7D9639BC51C4399A9A6A04B939BFA3967B08AE2535FF1EB" />
+      <CertPublisher Value="Microsoft Azure 3rd Party Code Sign" />
+    </Signer>
+    <Signer Name="Microsoft Code Signing PCA 2011" ID="ID_SIGNER_S_2">
+      <CertRoot Type="TBS" Value="F6F717A43AD9ABDDC8CEFDDE1C505462535E7D1307E630F9544A2D14FE8BF26E" />
+      <CertPublisher Value="Microsoft Corporation" />
+    </Signer>
+  </Signers>
+  <SigningScenarios>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 09-24-2021" Value="131">
+      <ProductSigners>
+        <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_S_3" />
+          <AllowedSigner SignerId="ID_SIGNER_S_2" />
+        </AllowedSigners>
+      </ProductSigners>
+    </SigningScenario>
+    <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 09-24-2021" Value="12">
+      <ProductSigners>
+        <FileRulesRef>
+          <FileRuleRef RuleID="ID_ALLOW_A_0" />
+          <FileRuleRef RuleID="ID_ALLOW_A_1" />
+          <FileRuleRef RuleID="ID_ALLOW_A_2" />
+          <FileRuleRef RuleID="ID_ALLOW_A_3" />
+        </FileRulesRef>
+      </ProductSigners>
+    </SigningScenario>
+  </SigningScenarios>
+  <UpdatePolicySigners />
+  <CiSigners />
+  <HvciOptions>0</HvciOptions>
+  <Settings>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Name">
+      <Value>
+        <String>Supplemental-W365Services</String>
+      </Value>
+    </Setting>
+    <Setting Provider="PolicyInfo" Key="Information" ValueName="Id">
+      <Value>
+        <String>2024-11-28</String>
+      </Value>
+    </Setting>
+  </Settings>
+</SiPolicy>
