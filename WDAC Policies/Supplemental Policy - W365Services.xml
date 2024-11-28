@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Supplemental Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.0.0.1</VersionEx>
+  <VersionEx>10.0.0.2</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <PolicyID>{ED128BDD-BEFE-4286-BA17-4326A99A85BC}</PolicyID>
-  <BasePolicyID>YOUR BASEPOLICY GUID</BasePolicyID>
+  <BasePolicyID>Your Base Policy GUID</BasePolicyID>
   <Rules>
     <Rule>
       <Option>Enabled:Unsigned System Integrity Policy</Option>
@@ -17,6 +17,14 @@
   </Rules>
   <EKUs />
   <FileRules>
+    <Allow ID="ID_ALLOW_A_4" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.DeviceDataContract.dll Hash Sha1" Hash="62F465584515AFAEB786B8ACD85669314D01B935" />
+    <Allow ID="ID_ALLOW_A_5" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.DeviceDataContract.dll Hash Sha256" Hash="315769957391833D6FD4BD7C834DF34DDCCB3E691B839E1EC7EB2A4F8495E0F7" />
+    <Allow ID="ID_ALLOW_A_6" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.DeviceDataContract.dll Hash Page Sha1" Hash="FBD270418875856C1D5BC8AB1FC2D0E6EAF98B83" />
+    <Allow ID="ID_ALLOW_A_7" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.DeviceDataContract.dll Hash Page Sha256" Hash="0F01DC8ACA61720186AD4FD668C7D3E6A659AC7DBCBF7A883D91422E905DF7C0" />
+    <Allow ID="ID_ALLOW_A_8" FriendlyName="C:\Package\dlls\Newtonsoft.Json.dll Hash Sha1" Hash="3A3864623EBF086AE6332D0BFE526DDCC1B0A88A" />
+    <Allow ID="ID_ALLOW_A_9" FriendlyName="C:\Package\dlls\Newtonsoft.Json.dll Hash Sha256" Hash="E3DF14F66B0511BAB3FCA24741BAE45A5FAD0BA41B6406194BA7A3EFE9117C22" />
+    <Allow ID="ID_ALLOW_A_10" FriendlyName="C:\Package\dlls\Newtonsoft.Json.dll Hash Page Sha1" Hash="F092B2A702D51CD76B45455A7BA0894FA52B6BD3" />
+    <Allow ID="ID_ALLOW_A_11" FriendlyName="C:\Package\dlls\Newtonsoft.Json.dll Hash Page Sha256" Hash="88E3D4C55DBA1DAE627498ABAD37174F378F247BDEB1FD643D96B9FDCF9422EF" />
     <Allow ID="ID_ALLOW_A_0" FriendlyName="C:\Package\Autofac.dll Hash Sha1" Hash="39CF3CBD6D98668034EB2572FEDEF58F0A1F33FB" />
     <Allow ID="ID_ALLOW_A_1" FriendlyName="C:\Package\Autofac.dll Hash Sha256" Hash="69D555124DB21972B04A4065A478A059C51A2B82E86E2AAE09E84040123D4F95" />
     <Allow ID="ID_ALLOW_A_2" FriendlyName="C:\Package\Autofac.dll Hash Page Sha1" Hash="479385F880554C9324C094D2F1F1340D59AF2384" />
@@ -49,6 +57,14 @@
     <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 09-24-2021" Value="12">
       <ProductSigners>
         <FileRulesRef>
+          <FileRuleRef RuleID="ID_ALLOW_A_4" />
+          <FileRuleRef RuleID="ID_ALLOW_A_5" />
+          <FileRuleRef RuleID="ID_ALLOW_A_6" />
+          <FileRuleRef RuleID="ID_ALLOW_A_7" />
+          <FileRuleRef RuleID="ID_ALLOW_A_8" />
+          <FileRuleRef RuleID="ID_ALLOW_A_9" />
+          <FileRuleRef RuleID="ID_ALLOW_A_10" />
+          <FileRuleRef RuleID="ID_ALLOW_A_11" />
           <FileRuleRef RuleID="ID_ALLOW_A_0" />
           <FileRuleRef RuleID="ID_ALLOW_A_1" />
           <FileRuleRef RuleID="ID_ALLOW_A_2" />
