@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Supplemental Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.0.0.0</VersionEx>
+  <VersionEx>10.0.0.1</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
   <PolicyID>{ED128BDD-BEFE-4286-BA17-4326A99A85BC}</PolicyID>
-  <BasePolicyID>YOUR BASEPOLICY ID</BasePolicyID>
+  <BasePolicyID>YOUR BASEPOLICY GUID</BasePolicyID>
   <Rules>
     <Rule>
       <Option>Enabled:Unsigned System Integrity Policy</Option>
@@ -23,6 +23,10 @@
     <Allow ID="ID_ALLOW_A_3" FriendlyName="C:\Package\Autofac.dll Hash Page Sha256" Hash="96AD65FE0924856C782E03B429126DB52A7D37D7344FC9B05EC2D6F2E3C182BA" />
   </FileRules>
   <Signers>
+    <Signer Name="AME CS CA 01" ID="ID_SIGNER_S_0">
+      <CertRoot Type="TBS" Value="B3C1CB053296C713C7D9639BC51C4399A9A6A04B939BFA3967B08AE2535FF1EB" />
+      <CertPublisher Value="Microsoft Azure Code Sign" />
+    </Signer>
     <Signer Name="AME CS CA 01" ID="ID_SIGNER_S_3">
       <CertRoot Type="TBS" Value="B3C1CB053296C713C7D9639BC51C4399A9A6A04B939BFA3967B08AE2535FF1EB" />
       <CertPublisher Value="Microsoft Azure 3rd Party Code Sign" />
@@ -36,6 +40,7 @@
     <SigningScenario ID="ID_SIGNINGSCENARIO_DRIVERS_1" FriendlyName="Auto generated policy on 09-24-2021" Value="131">
       <ProductSigners>
         <AllowedSigners>
+          <AllowedSigner SignerId="ID_SIGNER_S_0" />
           <AllowedSigner SignerId="ID_SIGNER_S_3" />
           <AllowedSigner SignerId="ID_SIGNER_S_2" />
         </AllowedSigners>
