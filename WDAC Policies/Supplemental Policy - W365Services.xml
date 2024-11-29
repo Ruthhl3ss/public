@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SiPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" PolicyType="Supplemental Policy" xmlns="urn:schemas-microsoft-com:sipolicy">
-  <VersionEx>10.0.0.2</VersionEx>
+  <VersionEx>10.0.0.3</VersionEx>
   <PlatformID>{2E07F7E4-194C-4D20-B7C9-6F44A6C5A234}</PlatformID>
-  <PolicyID>{ED128BDD-BEFE-4286-BA17-4326A99A85BC}</PolicyID>
-  <BasePolicyID>Your Base Policy GUID</BasePolicyID>
+  <PolicyID>{ED128BDD-BEFE-4286-BA17-4326A899A85BC}</PolicyID>
+  <BasePolicyID>Your Baseline policy GUID</BasePolicyID>
   <Rules>
     <Rule>
       <Option>Enabled:Unsigned System Integrity Policy</Option>
@@ -17,6 +17,10 @@
   </Rules>
   <EKUs />
   <FileRules>
+    <Allow ID="ID_ALLOW_A_12" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.SDK.AgentClient.dll Hash Sha1" Hash="D414D4D91D1ADAA19176BD81D1A311FF0A58C8E3" />
+    <Allow ID="ID_ALLOW_A_13" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.SDK.AgentClient.dll Hash Sha256" Hash="4C52C0C2A164D8CA775BEF1B023A17ED5772FF680E37105CDD4A6FFA43D07DCE" />
+    <Allow ID="ID_ALLOW_A_14" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.SDK.AgentClient.dll Hash Page Sha1" Hash="AEFA5BAB9797D700C4DE65747EC511BBE15D9257" />
+    <Allow ID="ID_ALLOW_A_15" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.SDK.AgentClient.dll Hash Page Sha256" Hash="4A145A1468B7A49FAD8944107F7FF1BD0AB75C440B6FC62561D1E95157A03B38" />
     <Allow ID="ID_ALLOW_A_4" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.DeviceDataContract.dll Hash Sha1" Hash="62F465584515AFAEB786B8ACD85669314D01B935" />
     <Allow ID="ID_ALLOW_A_5" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.DeviceDataContract.dll Hash Sha256" Hash="315769957391833D6FD4BD7C834DF34DDCCB3E691B839E1EC7EB2A4F8495E0F7" />
     <Allow ID="ID_ALLOW_A_6" FriendlyName="C:\Package\dlls\Microsoft.Management.Services.CloudManagement.DeviceDataContract.dll Hash Page Sha1" Hash="FBD270418875856C1D5BC8AB1FC2D0E6EAF98B83" />
@@ -57,6 +61,10 @@
     <SigningScenario ID="ID_SIGNINGSCENARIO_WINDOWS" FriendlyName="Auto generated policy on 09-24-2021" Value="12">
       <ProductSigners>
         <FileRulesRef>
+          <FileRuleRef RuleID="ID_ALLOW_A_12" />
+          <FileRuleRef RuleID="ID_ALLOW_A_13" />
+          <FileRuleRef RuleID="ID_ALLOW_A_14" />
+          <FileRuleRef RuleID="ID_ALLOW_A_15" />
           <FileRuleRef RuleID="ID_ALLOW_A_4" />
           <FileRuleRef RuleID="ID_ALLOW_A_5" />
           <FileRuleRef RuleID="ID_ALLOW_A_6" />
