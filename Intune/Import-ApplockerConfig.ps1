@@ -256,7 +256,8 @@ $url = "https://graph.microsoft.com/beta/deviceManagement/deviceConfigurations/"
 # Create the AppLocker policy in Intune
 
 try {
-  Invoke-RestMethod -Uri $url -Method Post -Headers $script:Authheader -Body ($applockerPolicyObject | ConvertTo-Json) -ContentType "application/json" -ErrorAction Stop
+  $Result = Invoke-RestMethod -Uri $url -Method Post -Headers $script:Authheader -Body ($applockerPolicyObject | ConvertTo-Json) -ContentType "application/json" -ErrorAction Stop
+  Write-Output "AppLocker policy created successfully with ID: $($Result.id)"
 }
 catch {
   Write-Error "Failed to create AppLocker policy: $_"
