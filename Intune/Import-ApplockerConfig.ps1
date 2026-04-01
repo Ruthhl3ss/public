@@ -130,7 +130,7 @@ else {
     '@odata.type'          = '#microsoft.graph.omaSettingString'
     isEncrypted            = $false
     secretReferenceValueId = $null
-    value                  = $selectedXml.AppLockerPolicy.RuleCollection.OuterXml
+    value                  = $selectedXmlMsi.AppLockerPolicy.RuleCollection.OuterXml
   }
 }
 
@@ -159,7 +159,7 @@ else {
     '@odata.type'          = '#microsoft.graph.omaSettingString'
     isEncrypted            = $false
     secretReferenceValueId = $null
-    value                  = $selectedXml.AppLockerPolicy.RuleCollection.OuterXml
+    value                  = $selectedXmlScript.AppLockerPolicy.RuleCollection.OuterXml
   }
 
 }
@@ -189,7 +189,7 @@ else {
     '@odata.type'          = '#microsoft.graph.omaSettingString'
     isEncrypted            = $false
     secretReferenceValueId = $null
-    value                  = $selectedXml.AppLockerPolicy.RuleCollection.OuterXml
+    value                  = $selectedXmlDll.AppLockerPolicy.RuleCollection.OuterXml
   }
 
 }
@@ -219,7 +219,7 @@ else {
     '@odata.type'          = '#microsoft.graph.omaSettingString'
     isEncrypted            = $false
     secretReferenceValueId = $null
-    value                  = $selectedXml.AppLockerPolicy.RuleCollection.OuterXml
+    value                  = $selectedXmlAppx.AppLockerPolicy.RuleCollection.OuterXml
   }
 }
 
